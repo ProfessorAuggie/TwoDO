@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1056554286654",
+    "project_id": "device-streaming-7ab87962",
+    "storage_bucket": "device-streaming-7ab87962.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056554286654:android:0792cc29310fc96eee9b6f",
+        "android_client_info": {
+          "package_name": "com.example.twodo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAmVko8OiO3yvab19xcmP_iJpwklMkaTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
