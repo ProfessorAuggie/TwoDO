@@ -46,17 +46,15 @@ dependencies:
   firebase_storage: ^13.3.0
   firebase_messaging: ^16.2.0
   firebase_analytics: ^12.1.0
-  firebase_crashlytics: ^13.1.0
+  firebase_crashlytics: ^5.2.1
   
   # Authentication & Sign-in
   google_sign_in: ^6.2.1
   sign_in_with_apple: ^6.1.2
   
   # State Management
-  riverpod: ^2.7.0
-  flutter_riverpod: ^2.7.0
-  riverpod_generator: ^2.5.14
-  
+  riverpod: ^2.6.1
+  flutter_riverpod: ^2.6.1
   # Navigation
   go_router: ^17.2.3
   
@@ -68,11 +66,11 @@ dependencies:
   video_player: ^2.10.0
   
   # Rich Text Editor
-  flutter_quill: ^9.8.0
+  flutter_quill: ^11.5.0
   markdown: ^7.2.2
   
   # Notifications & Realtime
-  awesome_notifications: ^0.9.5
+  awesome_notifications: ^0.11.0
   
   # Local Storage & Caching
   shared_preferences: ^2.5.5
@@ -80,13 +78,13 @@ dependencies:
   hive_flutter: ^1.1.0
   
   # Utilities
-  intl: ^0.19.0
+  intl: ^0.20.0
   uuid: ^4.2.1
   connectivity_plus: ^6.1.0
-  package_info_plus: ^7.0.0
+  package_info_plus: ^9.0.1
   url_launcher: ^6.3.0
   share_plus: ^10.0.0
-  permission_handler: ^11.5.0
+  permission_handler: ^12.0.1
   
   # DateTime handling
   timezone: ^0.9.4
@@ -100,7 +98,6 @@ dependencies:
   qr_code_scanner: ^1.0.1
   
   # Testing & Quality
-  flutter_test_config: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -108,8 +105,6 @@ dev_dependencies:
 
   flutter_lints: ^6.0.0
   build_runner: ^2.4.12
-  riverpod_generator: ^2.5.14
-  hive_generator: ^2.0.1
   test: ^1.25.8
   mockito: ^5.4.6
   integration_test:
@@ -154,28 +149,3 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-  assets:
-    - assets/images/
-    - assets/icons/
-    - assets/animations/
-    - assets/lottie/
-
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Poppins-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter-Regular.ttf
-        - asset: assets/fonts/Inter-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Inter-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Inter-Bold.ttf
-          weight: 700
