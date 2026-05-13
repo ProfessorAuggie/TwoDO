@@ -1,5 +1,5 @@
 name: twodo
-description: "A new Flutter project."
+description: "Premium collaborative workspace app for couples, duos, and trios with real-time sync."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 2.0.0+1
 
 environment:
   sdk: ^3.11.5
@@ -31,33 +31,89 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # UI & Material Design
   cupertino_icons: ^1.0.8
+  google_fonts: ^8.1.0
+  flutter_svg: ^2.2.4
+  flutter_animate: ^4.5.0
+  shimmer: ^3.0.0
+  cached_network_image: ^3.4.1
+  
+  # Firebase
   firebase_core: ^4.7.0
   firebase_auth: ^6.4.0
   cloud_firestore: ^6.3.0
   firebase_storage: ^13.3.0
   firebase_messaging: ^16.2.0
-  provider: ^6.1.5+1
+  firebase_analytics: ^12.1.0
+  firebase_crashlytics: ^13.1.0
+  
+  # Authentication & Sign-in
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^6.1.2
+  
+  # State Management
+  riverpod: ^2.7.0
+  flutter_riverpod: ^2.7.0
+  riverpod_generator: ^2.5.14
+  
+  # Navigation
   go_router: ^17.2.3
+  
+  # File & Media Handling
   file_picker: ^11.0.2
   image_picker: ^1.2.2
-  flutter_svg: ^2.2.4
-  google_fonts: ^8.1.0
+  image_cropper: ^5.0.1
+  photo_view: ^0.14.0
+  video_player: ^2.10.0
+  
+  # Rich Text Editor
+  flutter_quill: ^9.8.0
+  markdown: ^7.2.2
+  
+  # Notifications & Realtime
+  awesome_notifications: ^0.9.5
+  
+  # Local Storage & Caching
   shared_preferences: ^2.5.5
-  google_sign_in: 6.2.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  
+  # Utilities
+  intl: ^0.19.0
+  uuid: ^4.2.1
+  connectivity_plus: ^6.1.0
+  package_info_plus: ^7.0.0
+  url_launcher: ^6.3.0
+  share_plus: ^10.0.0
+  permission_handler: ^11.5.0
+  
+  # DateTime handling
+  timezone: ^0.9.4
+  
+  # HTTP & API
+  http: ^1.2.1
+  dio: ^5.7.0
+  
+  # QR Code
+  qr_flutter: ^4.1.0
+  qr_code_scanner: ^1.0.1
+  
+  # Testing & Quality
+  flutter_test_config: ^0.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  build_runner: ^2.4.12
+  riverpod_generator: ^2.5.14
+  hive_generator: ^2.0.1
+  test: ^1.25.8
+  mockito: ^5.4.6
+  integration_test:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -98,5 +154,28 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/
+    - assets/lottie/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700

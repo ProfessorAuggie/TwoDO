@@ -1,0 +1,175 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function userId() {
+      return request.auth.uid;
+    }
+
+    function userEmail() {
+      return request.auth.token.email;
+    }
+
+    // USERS COLLECTION
+    match /users/{uid} {
+      // User can read and update their own profile
+      allow read: if isAuthenticated() && userId() == uid;
+      allow update: if isAuthenticated() && userId() == uid;
+      allow create: if isAuthenticated() && userId() == uid;
+      
+      // Prevent deletion of user documents
+      allow delete: if false;
+    }
+
+    // SPACES COLLECTION
+    match /spaces/{spaceId} {
+      // Must be a member of the space to read
+      allow read: if isAuthenticated() && 
+        exists(/databases/{database}/documents/spaces/{spaceId}) &&
+        request.auth.uid in resource.data.members[*].userId;
+
+      // Space owner or editor can update
+      allow update: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{spaceId}) &&
+        (resource.data.ownerId == userId() || 
+         (userId() in resource.data.members[?(@.userId == request.auth.uid && @.role in ['admin', 'editor'])].userId));
+
+      // Only owner can delete
+      allow delete: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{spaceId}) &&
+        resource.data.ownerId == userId();
+
+      // Only authenticated users can create (they become owner)
+      allow create: if isAuthenticated();
+
+      // NOTES SUBCOLLECTION
+      match /notes/{noteId} {
+        allow read: if isAuthenticated() &&
+          exists(/databases/{database}/documents/spaces/{spaceId}) &&
+          request.auth.uid in get(/databases/{database}/documents/spaces/{spaceId}).data.members[*].userId;
+
+        allow write: if isAuthenticated() &&
+          exists(/databases/{database}/documents/spaces/{spaceId}) &&
+          request.auth.uid in get(/databases/{database}/documents/spaces/{spaceId}).data.members[*].userId;
+
+        allow delete: if isAuthenticated() &&
+          (get(/databases/{database}/documents/notes/{noteId}).data.createdBy == userId() ||
+           get(/databases/{database}/documents/spaces/{spaceId}).data.ownerId == userId());
+      }
+
+      // TASKS SUBCOLLECTION
+      match /tasks/{taskId} {
+        allow read: if isAuthenticated() &&
+          exists(/databases/{database}/documents/spaces/{spaceId}) &&
+          request.auth.uid in get(/databases/{database}/documents/spaces/{spaceId}).data.members[*].userId;
+
+        allow write: if isAuthenticated() &&
+          exists(/databases/{database}/documents/spaces/{spaceId}) &&
+          request.auth.uid in get(/databases/{database}/documents/spaces/{spaceId}).data.members[*].userId;
+
+        allow delete: if isAuthenticated() &&
+          (get(/databases/{database}/documents/tasks/{taskId}).data.createdBy == userId() ||
+           get(/databases/{database}/documents/spaces/{spaceId}).data.ownerId == userId());
+      }
+    }
+
+    // NOTES COLLECTION (Root level for easier querying)
+    match /notes/{noteId} {
+      allow read: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{resource.data.spaceId}) &&
+        request.auth.uid in get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.members[*].userId;
+
+      allow write: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{resource.data.spaceId}) &&
+        (request.auth.uid in get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.members[*].userId ||
+         request.auth.uid == resource.data.createdBy);
+
+      allow delete: if isAuthenticated() &&
+        (resource.data.createdBy == userId() ||
+         get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.ownerId == userId());
+
+      allow create: if isAuthenticated();
+    }
+
+    // TASKS COLLECTION (Root level for easier querying)
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{resource.data.spaceId}) &&
+        request.auth.uid in get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.members[*].userId;
+
+      allow write: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{resource.data.spaceId}) &&
+        (request.auth.uid in get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.members[*].userId ||
+         request.auth.uid == resource.data.createdBy);
+
+      allow delete: if isAuthenticated() &&
+        (resource.data.createdBy == userId() ||
+         get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.ownerId == userId());
+
+      allow create: if isAuthenticated();
+    }
+
+    // FILES COLLECTION
+    match /files/{fileId} {
+      allow read: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{resource.data.spaceId}) &&
+        request.auth.uid in get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.members[*].userId;
+
+      allow write: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{resource.data.spaceId}) &&
+        request.auth.uid in get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.members[*].userId;
+
+      allow delete: if isAuthenticated() &&
+        (resource.data.uploadedBy == userId() ||
+         get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.ownerId == userId());
+
+      allow create: if isAuthenticated();
+    }
+
+    // ACTIVITIES COLLECTION (Logs)
+    match /activities/{activityId} {
+      // Users can read activities from spaces they're members of
+      allow read: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{resource.data.spaceId}) &&
+        request.auth.uid in get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.members[*].userId;
+
+      // Anyone can create activities
+      allow create: if isAuthenticated();
+
+      // No updates or deletes to activity logs
+      allow update, delete: if false;
+    }
+
+    // INVITES COLLECTION
+    match /invites/{inviteId} {
+      // Users can read invites where they're the invitee
+      allow read: if isAuthenticated() && resource.data.inviteeEmail == userEmail();
+
+      // Anyone can create invites (invite someone to a space)
+      allow create: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{request.resource.data.spaceId}) &&
+        request.auth.uid in get(/databases/{database}/documents/spaces/{request.resource.data.spaceId}).data.members[*].userId;
+
+      // Only space owner can update/delete invites
+      allow update, delete: if isAuthenticated() &&
+        exists(/databases/{database}/documents/spaces/{resource.data.spaceId}) &&
+        get(/databases/{database}/documents/spaces/{resource.data.spaceId}).data.ownerId == userId();
+    }
+
+    // PRESENCE COLLECTION (Real-time user status)
+    match /presence/{uid} {
+      // Users can read all presence data
+      allow read: if isAuthenticated();
+
+      // Users can update their own presence
+      allow write: if isAuthenticated() && userId() == uid;
+
+      // Presence documents auto-delete via TTL
+      allow delete: if isAuthenticated() && userId() == uid;
+    }
+  }
+}
