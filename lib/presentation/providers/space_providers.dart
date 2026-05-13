@@ -3,6 +3,7 @@ import 'package:twodo/services/firestore_service.dart';
 import 'package:twodo/data/models/space_model.dart';
 import 'package:twodo/data/models/note_model.dart';
 import 'package:twodo/data/models/task_model.dart';
+import 'package:twodo/data/models/file_model.dart';
 import 'package:twodo/presentation/providers/auth_providers.dart';
 
 // Firestore Services
@@ -47,6 +48,12 @@ final spaceTasksProvider =
   return taskService.getSpaceTasksStream(spaceId);
 });
 
+// SPACE FILES (Mock for now)
+final spaceFilesProvider =
+    StreamProvider.family<List<FileModel>, String>((ref, spaceId) {
+  return Stream.value([]);
+});
+
 // SPECIFIC NOTE
 final noteProvider = FutureProvider.family<NoteModel?, String>((ref, noteId) {
   final noteService = ref.watch(firestoreNoteServiceProvider);
@@ -57,6 +64,12 @@ final noteProvider = FutureProvider.family<NoteModel?, String>((ref, noteId) {
 final taskProvider = FutureProvider.family<TaskModel?, String>((ref, taskId) {
   final taskService = ref.watch(firestoreTaskServiceProvider);
   return taskService.getTaskById(taskId);
+});
+
+// SPECIFIC FILE (Mock for now)
+final fileProvider =
+    FutureProvider.family<FileModel?, String>((ref, fileId) {
+  return Future.value(null);
 });
 
 // CREATE SPACE CONTROLLER

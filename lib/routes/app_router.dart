@@ -9,6 +9,15 @@ import 'package:twodo/presentation/pages/home/home_screen.dart';
 import 'package:twodo/presentation/pages/spaces/space_detail_screen.dart';
 import 'package:twodo/presentation/pages/spaces/create_space_screen.dart';
 import 'package:twodo/presentation/pages/profile/profile_screen.dart';
+import 'package:twodo/presentation/pages/notes/notes_list_screen.dart';
+import 'package:twodo/presentation/pages/notes/create_note_screen.dart';
+import 'package:twodo/presentation/pages/notes/note_detail_screen.dart';
+import 'package:twodo/presentation/pages/tasks/tasks_list_screen.dart';
+import 'package:twodo/presentation/pages/tasks/create_task_screen.dart';
+import 'package:twodo/presentation/pages/tasks/task_detail_screen.dart';
+import 'package:twodo/presentation/pages/files/files_list_screen.dart';
+import 'package:twodo/presentation/pages/files/upload_file_screen.dart';
+import 'package:twodo/presentation/pages/files/file_detail_screen.dart';
 
 class AppRouter {
   static const String splashRoute = '/';
@@ -80,9 +89,101 @@ class AppRouter {
           pageBuilder: (context, state) {
             final spaceId = state.pathParameters['spaceId']!;
             return MaterialPage(
-              child: SpaceDetailScreen(spaceId: spaceId),
+              child: SpaceDetailScreenNew(spaceId: spaceId),
             );
           },
+          routes: [
+            // Notes Routes
+            GoRoute(
+              path: 'notes',
+              pageBuilder: (context, state) {
+                final spaceId = state.pathParameters['spaceId']!;
+                return MaterialPage(
+                  child: NotesListScreen(spaceId: spaceId),
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: 'create',
+                  pageBuilder: (context, state) {
+                    final spaceId = state.pathParameters['spaceId']!;
+                    return MaterialPage(
+                      child: CreateNoteScreen(spaceId: spaceId),
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: ':noteId',
+                  pageBuilder: (context, state) {
+                    final noteId = state.pathParameters['noteId']!;
+                    return MaterialPage(
+                      child: NoteDetailScreen(noteId: noteId),
+                    );
+                  },
+                ),
+              ],
+            ),
+            // Tasks Routes
+            GoRoute(
+              path: 'tasks',
+              pageBuilder: (context, state) {
+                final spaceId = state.pathParameters['spaceId']!;
+                return MaterialPage(
+                  child: TasksListScreen(spaceId: spaceId),
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: 'create',
+                  pageBuilder: (context, state) {
+                    final spaceId = state.pathParameters['spaceId']!;
+                    return MaterialPage(
+                      child: CreateTaskScreen(spaceId: spaceId),
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: ':taskId',
+                  pageBuilder: (context, state) {
+                    final taskId = state.pathParameters['taskId']!;
+                    return MaterialPage(
+                      child: TaskDetailScreen(taskId: taskId),
+                    );
+                  },
+                ),
+              ],
+            ),
+            // Files Routes
+            GoRoute(
+              path: 'files',
+              pageBuilder: (context, state) {
+                final spaceId = state.pathParameters['spaceId']!;
+                return MaterialPage(
+                  child: FilesListScreen(spaceId: spaceId),
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: 'upload',
+                  pageBuilder: (context, state) {
+                    final spaceId = state.pathParameters['spaceId']!;
+                    return MaterialPage(
+                      child: UploadFileScreen(spaceId: spaceId),
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: ':fileId',
+                  pageBuilder: (context, state) {
+                    final fileId = state.pathParameters['fileId']!;
+                    return MaterialPage(
+                      child: FileDetailScreen(fileId: fileId),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           path: profileRoute,
